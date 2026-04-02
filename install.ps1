@@ -54,6 +54,36 @@ function Install-Dependencies {
   }
 }
 
+function Refresh-Path {
+  $machinePath = [System.Environment]::GetEnvironmentVariable("Path", "Machine")
+  $userPath = [System.Environment]::GetEnvironmentVariable("Path", "User")
+  $env:Path = "$machinePath;$userPath"
+}
+
+function Install-OpenCode {
+  if (Test-Command opencode) {
+    Write-Log "opencode already installed"
+    return
+  }
+
+  if (Test-Command scoop) {
+    scoop install opencode
+    return
+  }
+
+  if (Test-Command choco) {
+    choco install -y opencode
+    return
+  }
+
+  if (Test-Command npm) {
+    npm install -g opencode-ai
+    return
+  }
+
+  Write-Log "OpenCode CLI could not be installed automatically. Install it manually from https://opencode.ai/docs"
+}
+
 function Clone-OrUpdateRepo {
   $configRoot = Split-Path $ConfigDir -Parent
   if (-not (Test-Path $configRoot)) {
@@ -100,6 +130,9 @@ function Bootstrap-Neovim {
 }
 
 Install-Dependencies
+Refresh-Path
+Install-OpenCode
+Refresh-Path
 Clone-OrUpdateRepo
 Bootstrap-Neovim
 Write-Log "Restore complete"

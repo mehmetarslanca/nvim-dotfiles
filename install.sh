@@ -105,6 +105,27 @@ install_dependencies() {
   esac
 }
 
+install_opencode() {
+  if have opencode; then
+    log "opencode already installed"
+    return
+  fi
+
+  if have curl; then
+    log "Installing opencode CLI"
+    curl -fsSL https://opencode.ai/install | bash
+    return
+  fi
+
+  if have npm; then
+    log "Installing opencode CLI via npm"
+    npm install -g opencode-ai
+    return
+  fi
+
+  log "Could not install opencode automatically. Install it manually from https://opencode.ai/docs"
+}
+
 bootstrap_neovim() {
   if ! have git; then
     log "git is required but not installed."
@@ -125,6 +146,7 @@ bootstrap_neovim() {
 
 main() {
   install_dependencies
+  install_opencode
   clone_or_update_repo
   bootstrap_neovim
   log "Restore complete"
