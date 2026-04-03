@@ -140,7 +140,7 @@ bootstrap_neovim() {
   log "Installing plugins via Lazy"
   nvim --headless "+Lazy! sync" +qa
 
-  log "Triggering startup so Mason tools can restore"
+  log "Triggering startup so Mason tools can install"
   nvim --headless +qa
 }
 
@@ -149,7 +149,7 @@ main() {
   install_opencode
   clone_or_update_repo
   bootstrap_neovim
-  log "Restore complete"
+  log "Setup complete"
 }
 
 main "$@"

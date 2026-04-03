@@ -125,7 +125,7 @@ function Bootstrap-Neovim {
   Write-Log "Installing plugins via Lazy"
   nvim --headless "+Lazy! sync" +qa
 
-  Write-Log "Triggering startup so Mason tools can restore"
+  Write-Log "Triggering startup so Mason tools can install"
   nvim --headless +qa
 }
 
@@ -135,4 +135,4 @@ Install-OpenCode
 Refresh-Path
 Clone-OrUpdateRepo
 Bootstrap-Neovim
-Write-Log "Restore complete"
+Write-Log "Setup complete"

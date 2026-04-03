@@ -7,10 +7,10 @@ My portable Neovim/LazyVim setup.
 - LazyVim-based config with locked plugin versions via `lazy-lock.json`
 - Custom plugins and keymaps under `lua/plugins`
 - Automatic Mason tool installation for the language servers and formatters used in this setup
-- Automatic external `opencode` CLI installation during restore
-- Cross-platform restore scripts for Linux, macOS, and Windows
+- Automatic external `opencode` CLI installation during setup
+- Cross-platform install scripts for Linux, macOS, and Windows
 
-## Restore On A New Machine
+## Install On A New Machine
 
 ### Linux / macOS
 
@@ -37,7 +37,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://raw.githubus
 3. Backs up any existing Neovim config.
 4. Clones or updates this repo into the correct config directory.
 5. Runs `Lazy sync` so plugins are installed.
-6. Lets Mason restore the configured LSP/formatter/tooling set automatically.
+6. Lets Mason install the configured LSP/formatter/tooling set automatically.
 
 ## Custom Keymaps
 
@@ -56,14 +56,21 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://raw.githubus
 - `GitHub Copilot` via `zbirenbaum/copilot.lua`: `<M-[>` selects the previous suggestion
 - `GitHub Copilot` via `zbirenbaum/copilot.lua`: `<C-]>` dismisses the current suggestion
 
-## Authentication After Restore
+## Authentication After Install
 
 - `opencode.nvim` and `99.nvim` both depend on the external `opencode` CLI.
-- Restore scripts install `opencode` automatically, but you still need to authenticate on the new machine.
+- Install scripts add `opencode` automatically, but you still need to authenticate on the new machine.
 - Run `opencode` and use `/connect`, or run `opencode auth login`.
 - Inline autocomplete comes from `zbirenbaum/copilot.lua`.
-- To enable Copilot suggestions again after restore, run `:Copilot auth` inside Neovim.
+- To enable Copilot suggestions, run `:Copilot auth` inside Neovim.
 - Auth credentials stay on the local machine and are not stored in this repo.
+
+## Credential Safety
+
+- This repo contains only the Neovim config and setup scripts.
+- It does not include your local OpenCode auth files, Copilot auth files, shell environment files, or machine-specific tokens.
+- Anyone cloning this repo must authenticate their own `opencode` and Copilot sessions locally.
+- Cloning this repo does not give another user access to your accounts.
 
 ## Notes
 
@@ -72,4 +79,4 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://raw.githubus
 - OpenCode works best on Windows through WSL, even though the PowerShell installer is included here
 - Existing configs are backed up with a timestamp before replacement
 - If `opencode` is not found immediately after install, open a new terminal session
-- AI tools such as Copilot, Claude Code, and OpenCode may still require their own login/API setup after restore
+- AI tools such as Copilot, Claude Code, and OpenCode still require their own local login/API setup after install
