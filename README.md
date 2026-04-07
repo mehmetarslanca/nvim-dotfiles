@@ -6,6 +6,8 @@ My portable Neovim/LazyVim setup.
 
 - LazyVim-based config with locked plugin versions via `lazy-lock.json`
 - Custom plugins and keymaps under `lua/plugins`
+- Low-risk visual enhancements such as breadcrumbs, active indent guides, inline color previews, and rainbow delimiters
+- A custom Tokyo Night-based syntax palette tuned for higher contrast and clearer Java/Treesitter/LSP highlights
 - Automatic Mason tool installation for the language servers and formatters used in this setup
 - Automatic external `opencode` CLI installation during setup
 - Cross-platform install scripts for Linux, macOS, and Windows
