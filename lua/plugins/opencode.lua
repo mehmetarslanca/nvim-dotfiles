@@ -30,23 +30,42 @@ return {
   },
   config = function()
     local port = opencode_config.port()
-    local command = string.format("opencode --port %d", port)
+    local function terminal_opts()
+      return {
+        split = "right",
+        width = math.floor(vim.o.columns * 0.35),
+      }
+    end
+
+    local function with_attached_tui(open_fn)
+      if not opencode_config.ensure_server_started() then
+        vim.notify(
+          string.format("OpenCode server did not become ready on %s", opencode_config.url()),
+          vim.log.levels.ERROR,
+          { title = "opencode" }
+        )
+        return
+      end
+
+      open_fn(opencode_config.attach_command(), terminal_opts())
+    end
 
     -- Opencode genel ayarları
     vim.g.opencode_opts = {
       server = {
         port = port,
         start = function()
-          require("opencode.terminal").open(command, {
-            split = "right",
-            width = math.floor(vim.o.columns * 0.35),
-          })
+          with_attached_tui(function(command, opts)
+            require("opencode.terminal").open(command, opts)
+          end)
+        end,
+        stop = function()
+          require("opencode.terminal").close()
         end,
         toggle = function()
-          require("opencode.terminal").toggle(command, {
-            split = "right",
-            width = math.floor(vim.o.columns * 0.35),
-          })
+          with_attached_tui(function(command, opts)
+            require("opencode.terminal").toggle(command, opts)
+          end)
         end,
       },
     }
