@@ -29,8 +29,12 @@ return {
       },
     },
     config = function()
+      local opencode_config = require("config.opencode")
       local _99 = require("99")
       local Providers = require("99.providers")
+      local opencode_model = "openai/gpt-5.4"
+      local opencode_variant = "xhigh"
+      local opencode_url = opencode_config.url()
 
       local function strip_ansi(text)
         if not text then
@@ -54,6 +58,33 @@ return {
         end
       end
 
+      local function apply_opencode_variant(command, context, provider)
+        if provider.__variant and context.model == provider.__variant_model then
+          table.insert(command, #command, "--variant")
+          table.insert(command, #command, provider.__variant)
+        end
+
+        return command
+      end
+
+      Providers.OpenCodeProvider.__variant_model = opencode_model
+      Providers.OpenCodeProvider.__variant = opencode_variant
+      Providers.OpenCodeProvider._build_command = function(_, query, context)
+        return {
+          "opencode",
+          "run",
+          "--attach",
+          opencode_url,
+          "--dir",
+          vim.fn.getcwd(),
+          "--agent",
+          "build",
+          "-m",
+          context.model,
+          query,
+        }
+      end
+
       if not Providers.OpenCodeProvider.__stderr_passthrough then
         Providers.OpenCodeProvider.make_request = function(self, query, context, observer)
           observer.on_start()
@@ -61,7 +92,7 @@ return {
           local logger = context.logger:set_area(self:_get_provider_name())
           local stderr_chunks = {}
           local completed = false
-          local command = self:_build_command(query, context)
+          local command = apply_opencode_variant(self:_build_command(query, context), context, self)
 
           local function complete(status, text)
             if completed then
@@ -145,7 +176,7 @@ return {
 
       _99.setup({
         provider = Providers.OpenCodeProvider,
-        model = "opencode/mimo-v2-pro-free",
+        model = opencode_model,
         tmp_dir = "./tmp",
         completion = {
           source = "blink",

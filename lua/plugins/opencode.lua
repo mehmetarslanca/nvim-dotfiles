@@ -1,6 +1,11 @@
+local opencode_config = require("config.opencode")
+
 return {
   "nickjvandyke/opencode.nvim",
   version = "*",
+  cond = function()
+    return not opencode_config.is_sudo_frontend()
+  end,
   dependencies = {
     {
       "folke/snacks.nvim",
@@ -24,9 +29,26 @@ return {
     },
   },
   config = function()
+    local port = opencode_config.port()
+    local command = string.format("opencode --port %d", port)
+
     -- Opencode genel ayarları
     vim.g.opencode_opts = {
-      -- İhtiyaç duyulursa buraya özel ayarlar eklenebilir
+      server = {
+        port = port,
+        start = function()
+          require("opencode.terminal").open(command, {
+            split = "right",
+            width = math.floor(vim.o.columns * 0.35),
+          })
+        end,
+        toggle = function()
+          require("opencode.terminal").toggle(command, {
+            split = "right",
+            width = math.floor(vim.o.columns * 0.35),
+          })
+        end,
+      },
     }
 
     -- Dosyalar dışarıdan (AI tarafından) değiştirildiğinde otomatik yenilenmesi için gerekli

@@ -11,7 +11,7 @@ return {
           auto_trigger = true, -- Otomatik öneri aktif
           debounce = 75,
           keymap = {
-            accept = "<M-l>", -- Alt+l ile kabul et (Tab ile çakışmaz)
+            accept = "<C-Tab>", -- Tab akışını bozmadan öneriyi kabul et
             accept_word = false,
             accept_line = false,
             next = "<M-]>",

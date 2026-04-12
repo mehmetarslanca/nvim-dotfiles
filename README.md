@@ -10,6 +10,7 @@ My portable Neovim/LazyVim setup.
 - A custom Tokyo Night-based syntax palette tuned for higher contrast and clearer Java/Treesitter/LSP highlights
 - Automatic Mason tool installation for the language servers and formatters used in this setup
 - Automatic external `opencode` CLI installation during setup
+- A shared local OpenCode server setup so `opencode.nvim` and `99.nvim` reuse the same session by default
 - Cross-platform install scripts for Linux, macOS, and Windows
 
 ## Install On A New Machine
@@ -50,13 +51,27 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://raw.githubus
 - `opencode.nvim`: `<C-x>` opens the OpenCode action picker
 - `opencode.nvim`: `go` + motion sends a range to OpenCode
 - `opencode.nvim`: `goo` sends the current line to OpenCode
+- `99.nvim`: reuses the running OpenCode server instead of spawning a separate one
 - `99.nvim`: in visual mode, `<leader>9v` prompts with the highlighted selection
 - `99.nvim`: `<leader>9s` runs project search into quickfix
 - `99.nvim`: `<leader>9x` stops all active `99` requests
-- `GitHub Copilot` via `zbirenbaum/copilot.lua`: `<M-l>` accepts the inline autocomplete suggestion
+- `GitHub Copilot` via `zbirenbaum/copilot.lua`: `<C-Tab>` accepts the inline autocomplete suggestion
 - `GitHub Copilot` via `zbirenbaum/copilot.lua`: `<M-]>` selects the next suggestion
 - `GitHub Copilot` via `zbirenbaum/copilot.lua`: `<M-[>` selects the previous suggestion
 - `GitHub Copilot` via `zbirenbaum/copilot.lua`: `<C-]>` dismisses the current suggestion
+
+## OpenCode Server Layout
+
+- The default Neovim profile starts OpenCode on `127.0.0.1:4096`.
+- `nickjvandyke/opencode.nvim` connects to that fixed port instead of discovering random instances.
+- `99.nvim` uses `opencode run --attach http://127.0.0.1:4096`, so it shares the same OpenCode backend instead of starting another server.
+- This keeps the default OpenCode workflow intact while reducing duplicate background processes.
+
+## Optional Alternate OpenCode Frontend
+
+- An isolated test profile for `sudo-tee/opencode.nvim` is also included.
+- It is only enabled when Neovim is launched with `NVIM_OPENCODE_FRONTEND=sudo`.
+- That profile uses a separate OpenCode server on `127.0.0.1:4097` so it does not interfere with the default setup.
 
 ## Authentication After Install
 
