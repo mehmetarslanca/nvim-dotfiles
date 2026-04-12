@@ -63,15 +63,16 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://raw.githubus
 ## OpenCode Server Layout
 
 - The default Neovim profile starts OpenCode on `127.0.0.1:4096`.
-- `nickjvandyke/opencode.nvim` connects to that fixed port instead of discovering random instances.
+- `nickjvandyke/opencode.nvim` keeps the upstream OpenCode TUI, but now attaches to the shared server on that fixed port instead of trying to boot another TUI+server pair in-place.
 - `99.nvim` uses `opencode run --attach http://127.0.0.1:4096`, so it shares the same OpenCode backend instead of starting another server.
 - This keeps the default OpenCode workflow intact while reducing duplicate background processes.
+- If the shared server is missing, `opencode.nvim` starts `opencode serve --port 4096` in the background and then attaches the panel to it.
 
 ## Optional Alternate OpenCode Frontend
 
 - An isolated test profile for `sudo-tee/opencode.nvim` is also included.
-- It is only enabled when Neovim is launched with `NVIM_OPENCODE_FRONTEND=sudo`.
-- That profile uses a separate OpenCode server on `127.0.0.1:4097` so it does not interfere with the default setup.
+- It is only enabled manually when Neovim is launched with `NVIM_OPENCODE_FRONTEND=sudo`.
+- The manual `sudo` profile uses a separate OpenCode server on `127.0.0.1:4097` so it does not interfere with the default setup.
 
 ## Authentication After Install
 
