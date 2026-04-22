@@ -15,10 +15,18 @@ My portable Neovim/LazyVim setup.
 
 ## Install On A New Machine
 
+- Default installer source is `https://github.com/mehmetarslanca/nvim-dotfiles.git`.
+- If you want to install from your own fork, set `NVIM_DOTFILES_REPO_URL` before running the installer.
+
 ### Linux / macOS
 
 ```bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/mehmetarslanca/nvim-dotfiles/main/install.sh)"
+```
+
+```bash
+NVIM_DOTFILES_REPO_URL="https://github.com/<your-user>/nvim-dotfiles.git" \
+  bash -c "$(curl -fsSL https://raw.githubusercontent.com/mehmetarslanca/nvim-dotfiles/main/install.sh)"
 ```
 
 ### Windows PowerShell
@@ -55,7 +63,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://raw.githubus
 - `99.nvim`: in visual mode, `<leader>9v` prompts with the highlighted selection
 - `99.nvim`: `<leader>9s` runs project search into quickfix
 - `99.nvim`: `<leader>9x` stops all active `99` requests
-- `GitHub Copilot` via `zbirenbaum/copilot.lua`: `<C-Tab>` accepts the inline autocomplete suggestion
+- `GitHub Copilot` via `zbirenbaum/copilot.lua`: `<M-l>` accepts the inline autocomplete suggestion
 - `GitHub Copilot` via `zbirenbaum/copilot.lua`: `<M-]>` selects the next suggestion
 - `GitHub Copilot` via `zbirenbaum/copilot.lua`: `<M-[>` selects the previous suggestion
 - `GitHub Copilot` via `zbirenbaum/copilot.lua`: `<C-]>` dismisses the current suggestion
@@ -74,13 +82,16 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://raw.githubus
 - It is only enabled manually when Neovim is launched with `NVIM_OPENCODE_FRONTEND=sudo`.
 - The manual `sudo` profile uses a separate OpenCode server on `127.0.0.1:4097` so it does not interfere with the default setup.
 
-## Authentication After Install
+## GitHub And Auth Setup
+
+- Install scripts clone from GitHub and default to `mehmetarslanca/nvim-dotfiles`.
+- To use a different GitHub repo, set `NVIM_DOTFILES_REPO_URL` before running `install.sh` or `install.ps1`.
+- Inline autocomplete comes from `zbirenbaum/copilot.lua` and requires a GitHub Copilot account.
+- To sign in to GitHub Copilot after install, open Neovim and run `:Copilot auth`.
 
 - `opencode.nvim` and `99.nvim` both depend on the external `opencode` CLI.
 - Install scripts add `opencode` automatically, but you still need to authenticate on the new machine.
 - Run `opencode` and use `/connect`, or run `opencode auth login`.
-- Inline autocomplete comes from `zbirenbaum/copilot.lua`.
-- To enable Copilot suggestions, run `:Copilot auth` inside Neovim.
 - Auth credentials stay on the local machine and are not stored in this repo.
 
 ## Credential Safety
